@@ -11,6 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
 
+    env:
+      NEXT_PUBLIC_BASE_PATH: /NextJS-React-Portfolio
+
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
     strategy:
       matrix:
         node-version: [14.x]
