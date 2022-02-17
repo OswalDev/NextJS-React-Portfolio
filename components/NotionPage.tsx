@@ -9,8 +9,6 @@ import BodyClassName from 'react-body-classname'
 import useDarkMode from 'use-dark-mode'
 import { PageBlock } from 'notion-types'
 
-import { Tweet, TwitterContextProvider } from 'react-static-tweets'
-
 // core notion renderer
 import { NotionRenderer, Code, Collection, CollectionRow } from 'react-notion-x'
 
@@ -29,7 +27,6 @@ import { CustomFont } from './CustomFont'
 import { Loading } from './Loading'
 import { Page404 } from './Page404'
 import { PageHead } from './PageHead'
-import { PageActions } from './PageActions'
 import { Footer } from './Footer'
 import { PageSocial } from './PageSocial'
 import { GitHubShareButton } from './GitHubShareButton'
@@ -163,124 +160,5 @@ export const NotionPage: React.FC<types.PageProps> = ({
     pageAside = <PageSocial />
   }
 
-  return (
-    <TwitterContextProvider
-      value={{
-        tweetAstMap: (recordMap as any).tweetAstMap || {},
-        swrOptions: {
-          fetcher: (id) =>
-            fetch(`/api/get-tweet-ast/${id}`).then((r) => r.json())
-        }
-      }}
-    >
-      <PageHead site={site} />
 
-      <Head>
-        <meta property='og:title' content={title} />
-        <meta property='og:site_name' content={site.name} />
-
-        <meta name='twitter:title' content={title} />
-        <meta property='twitter:domain' content={site.domain} />
-
-        {config.twitter && (
-          <meta name='twitter:creator' content={`@${config.twitter}`} />
-        )}
-
-        {socialDescription && (
-          <>
-            <meta name='description' content={socialDescription} />
-            <meta property='og:description' content={socialDescription} />
-            <meta name='twitter:description' content={socialDescription} />
-          </>
-        )}
-
-        {socialImage ? (
-          <>
-            <meta name='twitter:card' content='summary_large_image' />
-            <meta name='twitter:image' content={socialImage} />
-            <meta property='og:image' content={socialImage} />
-          </>
-        ) : (
-          <meta name='twitter:card' content='summary' />
-        )}
-
-        {canonicalPageUrl && (
-          <>
-            <link rel='canonical' href={canonicalPageUrl} />
-            <meta property='og:url' content={canonicalPageUrl} />
-            <meta property='twitter:url' content={canonicalPageUrl} />
-          </>
-        )}
-
-        <title>{title}</title>
-      </Head>
-
-      <CustomFont site={site} />
-
-      {isLiteMode && <BodyClassName className='notion-lite' />}
-
-      <NotionRenderer
-        bodyClassName={cs(
-          styles.notion,
-          pageId === site.rootNotionPageId && 'index-page'
-        )}
-        components={{
-          pageLink: ({
-            href,
-            as,
-            passHref,
-            prefetch,
-            replace,
-            scroll,
-            shallow,
-            locale,
-            ...props
-          }) => (
-            <Link
-              href={href}
-              as={as}
-              passHref={passHref}
-              prefetch={prefetch}
-              replace={replace}
-              scroll={scroll}
-              shallow={shallow}
-              locale={locale}
-            >
-              <a {...props} />
-            </Link>
-          ),
-          code: Code,
-          collection: Collection,
-          collectionRow: CollectionRow,
-          tweet: Tweet,
-          modal: Modal,
-          equation: Equation
-        }}
-        recordMap={recordMap}
-        rootPageId={site.rootNotionPageId}
-        fullPage={!isLiteMode}
-        darkMode={darkMode.value}
-        previewImages={site.previewImages !== false}
-        showCollectionViewDropdown={false}
-        showTableOfContents={showTableOfContents}
-        minTableOfContentsItems={minTableOfContentsItems}
-        defaultPageIcon={config.defaultPageIcon}
-        defaultPageCover={config.defaultPageCover}
-        defaultPageCoverPosition={config.defaultPageCoverPosition}
-        mapPageUrl={siteMapPageUrl}
-        mapImageUrl={mapNotionImageUrl}
-        searchNotion={searchNotion}
-        pageFooter={comments}
-        pageAside={pageAside}
-        footer={
-          <Footer
-            isDarkMode={darkMode.value}
-            toggleDarkMode={darkMode.toggle}
-          />
-        }
-      />
-
-      <GitHubShareButton />
-    </TwitterContextProvider>
-  )
 }
